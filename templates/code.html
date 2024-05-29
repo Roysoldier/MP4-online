@@ -1,0 +1,1011 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Robot Editor</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+    }
+
+    .container {
+      display: flex;
+      height: 100vh;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .block-menu {
+      flex: 1;
+      padding: 10px;
+      background-color: #f9f9f9;
+      overflow-y: auto;
+    }
+
+    .block-menu h3 {
+      margin: 0;
+      padding: 10px;
+      background-color: #ccc;
+      text-align: center;
+    }
+
+    .block-menu .block {
+      width: 200px;
+      height: 50px;
+      margin: 10px;
+      cursor: pointer;
+      background-color: orange;
+      border-radius: 15px 15px 0 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      user-select: none;
+      color: white;
+      font-weight: bold;
+    }
+
+    .block-menu .block input[type="number"] {
+      width: 60px;
+      text-align: center;
+      margin-left: 10px;
+      border: none;
+      background-color: white;
+    }
+
+    .workspace {
+      flex: 2;
+      background-color: lightgray;
+      overflow: auto;
+      position: relative;
+    }
+
+    .workspace .block {
+      width: 200px;
+      height: 50px;
+      cursor: move;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: orange;
+      color: white;
+      font-weight: bold;
+      user-select: none;
+      border-radius: 15px 15px 0 0; 
+    }
+
+    .block {
+      width: 200px;
+      height: 50px;
+      cursor: move;
+    }
+
+    .rectangle {
+      z-index: 1;
+      width: 150px;
+      height: 150px;
+      background-color: transparent;
+      position: relative;
+      cursor: move;
+    }
+
+    .rectangle::before {
+      content: '';
+      position: absolute;
+      top: 50px;
+      left: 0;
+      width: 50px;
+      height: var(--rectangle-before-height, 50px);
+      background-color: rgb(66, 170, 211);
+    }
+
+    .rectangle .bottom-border {
+      position: absolute;
+      bottom: 0;
+      top: 100px;
+      left: 0px;
+      width: 100px;
+      height: 30px;
+      background-color: rgb(66, 170, 211);
+      border-bottom-right-radius: 20px;
+    }
+
+    .block.red {
+      background-color: rgb(190, 65, 65);
+      border-radius: 0;
+    }
+
+    .block.blue {
+      background-color: rgb(66, 101, 146);
+      border-radius: 0;
+    }
+
+    .block.cyan {
+      background-color: rgb(66, 170, 211);
+      border-radius: 0;
+      border-top-right-radius: 20px;
+    }
+
+    .block.yellow {
+      background-color: #4cad59;
+      border-radius: 0;
+    }
+
+    .block .input-container {
+      display: flex;
+      align-items: center;
+    }
+
+    .block .input-container input[type="number"] {
+      width: 60px;
+      border-radius: 10px;
+      background-color: white;
+      border: none;
+      text-align: center;
+      margin-left: 5px;
+    }
+
+    .block .deg::after {
+      content: "°";
+    }
+
+    .trash {
+      width: 100px;
+      height: 100px;
+      background-color: #ccc;
+      position: absolute;
+      bottom: 10px;
+      right: 10px;
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-radius: 10px;
+    }
+
+    .trash:hover {
+      background-color: #aaa;
+    }
+
+    .popup {
+      display: none;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: white;
+      padding: 20px;
+      border: 1px solid black;
+      border-radius: 5px;
+      box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+    }
+
+    .popup-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .popup-buttons button {
+      padding: 5px 10px;
+      cursor: pointer;
+    }
+
+    .block-controls {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      display: none;
+    }
+
+    .block.selected .block-controls {
+      display: block;
+    }
+
+  /* styles.css */
+
+.instruction-button {
+    background-color: #4CAF50; 
+    border: none;
+    color: white;
+    padding: 15px 32px; 
+    text-align: center; 
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px; 
+    margin: 4px 2px; 
+    cursor: pointer; 
+    border-radius: 12px; 
+    transition: background-color 0.3s, transform 0.3s;
+    position: fixed;
+    bottom: 20px; 
+    left: 20px; 
+}
+
+.instruction-button:hover {
+    background-color: #45a049;
+    transform: scale(1.05);
+}
+
+.instruction-button:active {
+    background-color: #3e8e41; 
+    transform: scale(0.95);
+}
+
+.instruction-button:focus {
+    outline: none;
+    box-shadow: 0 0 10px #4CAF50;
+}
+
+#delete-all-btn {
+    background-color: #f44336; 
+    color: white; 
+    border: none;
+    border-radius: 12px; 
+    padding: 15px 32px; 
+    text-align: center; 
+    text-decoration: none; 
+    display: inline-block; 
+    font-size: 16px;
+    margin: 4px 2px; 
+    cursor: pointer; 
+    transition: background-color 0.3s, transform 0.3s; 
+    position: fixed;
+    bottom: 70px; 
+    left: 20px; 
+}
+
+#delete-all-btn:hover {
+    background-color: #d32f2f;
+    transform: scale(1.05); 
+}
+
+#delete-all-btn:active {
+    background-color: #b71c1c;
+    transform: scale(0.95);
+}
+
+#delete-all-btn:focus {
+    outline: none; 
+    box-shadow: 0 0 10px #f44336; 
+}
+
+
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="block-menu">
+      <h3>Blocs de commandes</h3>
+      <div class="block start">
+        <span>Début</span>
+      </div>
+      <div class="block yellow">
+        <span>Avancer de :</span>
+        <div class="input-container">
+          <input type="number" step="0.1" min="0" onkeypress="return event.charCode >= 48 && event.charCode <= 57 || event.charCode === 46">
+        </div>
+      </div>
+      <div class="block red">
+        <span>Reculer de :</span>
+        <div class="input-container">
+          <input type="number" step="0.1" min="0" onkeypress="return event.charCode >= 48 && event.charCode <= 57 || event.charCode === 46">
+        </div>
+      </div>
+      <div class="block blue deg">
+        <span>⤶ Tourner de :</span>
+        <div class="input-container deg">
+          <input type="number" min="0" max="360" onkeypress="return event.charCode >= 48 && event.charCode <= 57">
+        </div>
+      </div>
+      <div class="block blue deg">
+        <span>⤷ Tourner de :</span>
+        <div class="input-container deg">
+          <input type="number" step="1" min="0" max="360" onkeypress="return event.charCode >= 48 && event.charCode <= 57">
+        </div>
+      </div>
+      <div class="block cyan rectangle">
+        <div class="bottom-border b2"></div>
+        <span>Répeter :</span>
+        <div class="input-container">
+          <input type="number" step="1" min="0"  onkeypress="return event.charCode >= 48 && event.charCode <= 57">
+          <span> &nbspfois</span>
+        </div>
+      </div>
+      <button class="instruction-button" onclick="instruction()">Instruction</button>
+      <button id="delete-all-btn">Tout supprimer</button>
+    </div>
+    <div class="workspace" id="workspace"></div>
+    <div class="trash" id="trash"><img class='corbeille' src='./static/data/corbeille_ferme.svg' width="100" height="100"></img></div>
+    <div class="popup" id="popup">
+      <p>Voulez-vous supprimer ce bloc ?</p>
+      <div class="popup-buttons">
+        <button id="confirm-delete">Oui</button>
+        <button id="cancel-delete">Non</button>
+      </div>
+    </div>
+  </div>
+  <script>
+let selectedBlock = null;
+const workspace = document.getElementById("workspace");
+const trash = document.getElementById("trash");
+const popup = document.getElementById("popup");
+const confirmDeleteBtn = document.getElementById("confirm-delete");
+const cancelDeleteBtn = document.getElementById("cancel-delete");
+const deleteAllBtn = document.getElementById("delete-all-btn");
+const blocksMap = new Map();
+let blockIdCounter = 0;
+let repeat = 0;
+
+document.querySelectorAll('.block-menu .block').forEach(item => {
+  item.addEventListener('click', function() {
+    const clone = item.cloneNode(true);
+    clone.id = `block-${blockIdCounter++}`;
+    clone.style.position = "absolute";
+    clone.style.left = (workspace.offsetWidth - clone.offsetWidth) / 2 + "px"; 
+    clone.style.top = (workspace.offsetHeight - clone.offsetHeight) / 2 + "px"; 
+    clone.style.backgroundColor = getComputedStyle(item).backgroundColor; 
+    workspace.appendChild(clone);
+    selectBlock(clone);
+    addInputEventListener(clone);
+    saveBlocksToLocalStorage();
+  });
+});
+
+function selectBlock(block) {
+  if (selectedBlock) {
+    selectedBlock.classList.remove("selected");
+  }
+  selectedBlock = block;
+  block.classList.add("selected");
+  addInputEventListener(block);
+}
+
+workspace.addEventListener('mousedown', function(event) {
+  if (event.target.classList.contains('block') || event.target.parentNode.classList.contains('block')) {
+    let targetBlock = event.target.classList.contains('block') ? event.target : event.target.parentNode;
+    selectBlock(targetBlock);
+    const offsetX = event.clientX - selectedBlock.offsetLeft;
+    const offsetY = event.clientY - selectedBlock.offsetTop;
+    let moveX, moveY;
+    function moveBlock(event) {
+      moveX = event.clientX - offsetX;
+      moveY = event.clientY - offsetY;
+      moveX = Math.min(Math.max(moveX, 0), workspace.offsetWidth - selectedBlock.offsetWidth);
+      moveY = Math.min(Math.max(moveY, 0), workspace.offsetHeight - selectedBlock.offsetHeight);
+      selectedBlock.style.left = moveX + 'px';
+      selectedBlock.style.top = moveY + 'px';
+      moveChildren(selectedBlock, moveX, moveY);
+      const trashRect = trash.getBoundingClientRect();
+      const blockRect = selectedBlock.getBoundingClientRect();
+      if (
+        blockRect.left < trashRect.right &&
+        blockRect.right > trashRect.left &&
+        blockRect.top < trashRect.bottom &&
+        blockRect.bottom > trashRect.top
+      ) {
+        trash.innerHTML = "<img class='corbeille' src='./static/data/corbeille_ouverte.svg' width='100' height='100'>";
+        popup.style.display = "block";
+      } else {
+        trash.innerHTML = "<img class='corbeille' src='./static/data/corbeille_ferme.svg' width='100' height='100'>";
+        popup.style.display = "none";
+      }
+      saveBlocksToLocalStorage();
+    }
+    function stopMove(event) {
+      document.removeEventListener('mousemove', moveBlock);
+      document.removeEventListener('mouseup', stopMove);
+      checkDrop(event.clientX, event.clientY);
+    }
+    document.addEventListener('mousemove', moveBlock);
+    document.addEventListener('mouseup', stopMove);
+  }
+});
+
+function checkDrop(clientX, clientY) {
+  const blocks = document.querySelectorAll('.workspace .block');
+  let dropped = false;
+  blocks.forEach(block => {
+    if (block !== selectedBlock) {
+      const blockRect = block.getBoundingClientRect();
+      if (
+        clientX > blockRect.left && clientX < blockRect.right &&
+        clientY > blockRect.top && clientY < blockRect.bottom
+      ) {
+        if (block.classList.contains('rectangle')) {
+          addChild(block, selectedBlock, true);
+        } else {
+          addChild(block, selectedBlock, false);
+        }
+        dropped = true;
+      }
+    }
+  });
+
+  if (!dropped && selectedBlock.dataset.parentId) {
+    removeChild(selectedBlock);
+  }
+}
+
+function removeChild(child) {
+  const parentId = child.dataset.parentId;
+  if (parentId && blocksMap.has(parentId)) {
+    const parentChildren = blocksMap.get(parentId);
+    const index = parentChildren.indexOf(child.id);
+    if (index !== -1) {
+      parentChildren.splice(index, 1);
+    }
+    child.removeAttribute('data-parent-id');
+    r = getRepeaters()
+    const entries = Array.from(blocksMap.entries());
+
+    
+    entries.reverse();
+
+  for (const [key, value] of entries) {
+    if (r.includes(key)) {
+      adjustRepeatBlockSize(key);
+      break; 
+  }
+}
+ 
+    saveBlocksToLocalStorage();
+    handleBlockChange();
+  }
+}
+
+function saveBlocksMapToLocalStorage() {
+  localStorage.setItem('blocksMap', JSON.stringify(Array.from(blocksMap.entries())));
+}
+
+
+function loadBlocksMapFromLocalStorage() {
+  const storedMap = localStorage.getItem('blocksMap');
+  if (storedMap) {
+    const parsedMap = new Map(JSON.parse(storedMap));
+    parsedMap.forEach((value, key) => {
+      blocksMap.set(key, value);
+    });
+  }
+}
+
+
+function moveChildren(block, moveX, moveY) {
+  if (blocksMap.has(block.id)) {
+    blocksMap.get(block.id).forEach(child => {
+      const childBlock = document.getElementById(child);
+      if (childBlock) {
+        const offsetX = parseInt(childBlock.dataset.offsetX, 10);
+        const offsetY = parseInt(childBlock.dataset.offsetY, 10);
+        childBlock.style.left = moveX + offsetX + 'px';
+        childBlock.style.top = moveY + offsetY + 'px';
+        moveChildren(childBlock, moveX + offsetX, moveY + offsetY);
+      }
+    });
+  }
+}
+
+
+function addChild(parent, child, isInsideRepeat) {
+  const parentId = parent.id;
+  const childId = child.id;
+  if (!blocksMap.has(parentId)) {
+    blocksMap.set(parentId, []);
+  }
+  blocksMap.get(parentId).push(childId);
+  child.dataset.parentId = parentId;
+
+  const parentTop = parseInt(parent.style.top, 10);
+  const parentHeight = parent.offsetHeight;
+  let newTop;
+  if (isInsideRepeat) {
+    newTop = parentTop + parentHeight;
+    child.style.left = (parseInt(parent.style.left, 10) + 50) + 'px';
+  } else {
+    const parentChildren = blocksMap.get(parentId);
+    const lastChildId = parentChildren[parentChildren.length - 2];
+    const lastChild = document.getElementById(lastChildId);
+    if (lastChild) {
+      newTop = parseInt(lastChild.style.top, 10) + lastChild.offsetHeight;
+    } else {
+      newTop = parentTop + parentHeight;
+    }
+    child.style.left = parent.style.left;
+  }
+  child.style.top = newTop + 'px';
+
+  const offsetX = parseInt(child.style.left, 10) - parseInt(parent.style.left, 10);
+  const offsetY = newTop - parentTop;
+  child.dataset.offsetX = offsetX;
+  child.dataset.offsetY = offsetY;
+  
+  r = getRepeaters()
+  const entries = Array.from(blocksMap.entries());
+
+ 
+  entries.reverse();
+
+  for (const [key, value] of entries) {
+  if (r.includes(key)) {
+    adjustRepeatBlockSize(key);
+    break; 
+  }
+}
+  saveBlocksToLocalStorage();
+  handleBlockChange();
+}
+
+function getRepeaters() {
+  const repeaters = [];
+  const blocks = document.querySelectorAll('.block');
+  blocks.forEach(block => {
+    if (block.classList.contains('rectangle')) {
+      
+      repeaters.push(block.id);
+    }
+  });
+  return repeaters;
+}
+
+
+
+
+function adjustRepeatBlockSize(rectangle) {
+  const rectangleBase = document.getElementById(rectangle);
+  const totalChildren = countChildrenRecursively(rectangle);
+  const beforeElement = rectangleBase.querySelector('.rectangle::before');
+  const bottomBorder = rectangleBase.querySelector('.rectangle .bottom-border');
+  const newTop = 100 + 50*(totalChildren-1);
+  if (newTop < 100) {
+    newTop = 100
+  }
+  bottomBorder.style.top = `${newTop}px`
+  const newHeight = 50 + 50 * (totalChildren - 1);
+  if (newHeight < 50) {
+    newHeight = 50
+  }
+
+    rectangleBase.style.setProperty('--rectangle-before-height', `${newHeight}px`);
+  
+
+  
+}
+
+
+
+// gère les instruction à renvoyer
+function instruction() {
+  const startBlock = findStartBlock();
+  repeat = 0
+  if (startBlock) {
+    let instr = '\nfrom pybricks.hubs import EV3Brick \nfrom pybricks.ev3devices import (Motor, TouchSensor, ColorSensor,InfraredSensor, UltrasonicSensor, GyroSensor)\nfrom pybricks.parameters import Port, Stop, Direction, Button, Color\nfrom pybricks.tools import wait, StopWatch, DataLog\nfrom pybricks.robotics import DriveBase\nfrom pybricks.media.ev3dev import SoundFile, ImageFile\nimport time\nfrom pybricks import ev3brick\n\n\nev3 = EV3Brick()\nmoteur_gauche = Motor(Port.A)\nmoteur_droite = Motor(Port.D)\nrobot = DriveBase(moteur_gauche, moteur_droite, 100, 190)\n\n';
+    instr += `${getBlockInstructions(startBlock)}`;
+    displayPythonContent(instr);
+  } else {
+    alert("Aucun bloc 'Début' trouvé.");
+  }
+}
+
+function displayPythonContent(content) {
+  const pythonContent = `# Instructions\n${content}`;
+
+  const newWindow = window.open('', '_blank');
+  newWindow.document.body.innerHTML = `<pre>${pythonContent}</pre>`;
+
+  const downloadButton = newWindow.document.createElement('button');
+  downloadButton.textContent = 'Télécharger';
+  downloadButton.addEventListener('click', function() {
+    downloadPythonFile(content);
+  });
+  newWindow.document.body.appendChild(downloadButton);
+}
+
+function downloadPythonFile(content) {
+  const blob = new Blob([content], { type: 'text/x-python' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'instructions.py';
+  document.body.appendChild(a);
+  a.click();
+  setTimeout(() => {
+    document.body.removeChild(a);
+    window.URL.revokeObjectURL(url);
+  }, 0);
+}
+
+
+function getBlockInstructions(block) {
+  let finalReturn = '';
+  let instructions = block.querySelector('span').innerText;
+  const input = block.querySelector('input[type="number"]');
+  
+  let pinput = 1;
+  if(instructions == 'Début') {
+    finalReturn += `# ${instructions} Du code : \n`
+  }
+  else if (instructions == 'Avancer de :') {
+    if (input.value) {
+    pinput = input.value
+  }
+  let copy = repeat 
+  while (copy > 0) {
+    finalReturn += '    ';
+    copy --
+  }
+
+  finalReturn += `robot.straight(${pinput})\n`
+  }
+  else if (instructions == 'Répeter :') {
+    if (input.value) {
+      pinput = input.value
+  }
+  let copy = repeat 
+  while (copy > 0) {
+    finalReturn += '    ';
+    copy --
+  }
+
+  finalReturn += `for i in range(${pinput}):\n`
+  repeat ++
+  }
+  else if (instructions == 'Reculer de :') {
+    if (input.value) {
+    pinput = input.value
+  }
+
+  let copy = repeat 
+  while (copy > 0) {
+    finalReturn += '    ';
+    copy --
+  }
+
+  finalReturn += `robot.straight(-${pinput})\n`
+  }
+
+  else if (instructions == '⤷ Tourner de :') {
+    if (input.value) {
+    pinput = input.value
+  }
+  else {
+    pinput = 10
+  }
+
+  let copy = repeat 
+  while (copy > 0) {
+    finalReturn += '    ';
+    copy --
+  }
+
+  finalReturn += `robot.turn(${pinput})\n`
+  }
+  else if (instructions == '⤶ Tourner de :') {
+    if (input.value) {
+    pinput = input.value
+  }
+  else {
+    pinput = 10
+  }
+
+  let copy = repeat 
+  while (copy > 0) {
+    finalReturn += '    ';
+    copy --
+  }
+
+  finalReturn += `robot.turn(-${pinput})\n`
+  }
+  
+  else {
+    finalReturn += `#${instructions}\n`
+  }
+  
+ 
+
+  if (blocksMap.has(block.id)) {
+    const children = blocksMap.get(block.id);
+    children.forEach(childId => {
+      const childBlock = document.getElementById(childId);
+      if (childBlock) {
+        finalReturn += `${getBlockInstructions(childBlock)}`;
+      }
+    });
+  }
+
+  return finalReturn;
+}
+
+function findStartBlock() {
+  const blocks = document.querySelectorAll('.workspace .block');
+  let startBlock = null;
+
+  blocks.forEach(block => {
+    if (block.querySelector('span').innerText === 'Début') {
+      startBlock = block;
+    }
+  });
+
+  return startBlock;
+}
+
+
+
+// Compte les enfant
+function countChildrenRecursively(id) {
+  let counter = 0;
+
+  if (blocksMap.has(id)) {
+
+    const childrenIds = blocksMap.get(id);
+    childrenIds.forEach(childId => {
+      counter++; 
+      counter += countChildrenRecursively(childId); 
+    });
+  }
+
+  return counter;
+}
+function removeBlock(blockId) {
+  const block = document.getElementById(blockId);
+  if (!block) return;
+
+  
+  removeChildren(blockId);
+
+  block.remove();
+
+  blocksMap.delete(blockId);
+
+  saveBlocksToLocalStorage();
+}
+
+function removeChildren(parentId) {
+  if (!blocksMap.has(parentId)) return;
+
+  const childrenIds = blocksMap.get(parentId);
+
+  childrenIds.forEach(childId => {
+    removeChildren(childId);
+    const child = document.getElementById(childId);
+    if (child) {
+      child.remove();
+      blocksMap.delete(childId);
+    }
+  });
+
+  blocksMap.delete(parentId);
+
+}
+
+
+
+
+
+function alertMapContents(map) {
+  let mapContents = "";
+  map.forEach((value, key) => {
+    mapContents += `${key}: ${JSON.stringify(value)}\n`;
+  });
+  //alert(mapContents);
+}
+
+
+
+
+confirmDeleteBtn.addEventListener('click', function() {
+  if (selectedBlock) {
+    removeBlock(selectedBlock.id);
+    selectedBlock.remove();
+    selectedBlock = null;
+    popup.style.display = "none";
+    saveBlocksToLocalStorage();
+  }
+});
+
+cancelDeleteBtn.addEventListener('click', function() {
+  if (selectedBlock) {
+    selectedBlock.style.left = (workspace.offsetWidth - selectedBlock.offsetWidth) / 2 + "px";
+    selectedBlock.style.top = (workspace.offsetHeight - selectedBlock.offsetHeight) / 2 + "px";
+    popup.style.display = "none";
+  }
+});
+
+deleteAllBtn.addEventListener("click", function() {
+  const confirmation = confirm("Voulez-vous vraiment supprimer tous les blocs ?");
+  if (confirmation) {
+    const workspaceBlocks = document.querySelectorAll('.workspace .block');
+    workspaceBlocks.forEach(block => block.remove());
+    blocksMap.clear();
+    saveBlocksToLocalStorage();
+  }
+});
+function saveBlocksMapToLocalStorage() {
+  localStorage.setItem('blocksMap', JSON.stringify(Array.from(blocksMap.entries())));
+}
+
+
+function addInputEventListener(block) {
+  const input = block.querySelector('input[type="number"]');
+  if (input) {
+    input.addEventListener('input', saveBlocksToLocalStorage);
+  }
+}
+
+
+
+  function loadBlocksFromLocalStorage() {
+  const blocksData = JSON.parse(localStorage.getItem('blocksData'));
+  if (blocksData) {
+    blocksData.forEach(blockData => {
+      const block = document.createElement('div');
+      const uniqueId = `block-${blockIdCounter++}`;
+      block.id = uniqueId;
+      block.classList.add('block', blockData.type);
+      block.style.position = 'absolute';
+      block.style.left = blockData.position.left;
+      block.style.top = blockData.position.top;
+      if (blockData.text == 'Début') {
+        block.innerHTML = `
+          <span>${blockData.text}</span>
+          <div class="input-container">
+          </div>
+        `;
+      } else if (blockData.text == '⤷ Tourner de :' || blockData.text == '⤶ Tourner de :') {
+        block.innerHTML = `
+          <span>${blockData.text}</span>
+          <div class="input-container deg">
+            <input type="number" value="${blockData.value || ''}" step="1" min="0">
+          </div>
+        `;
+      } else if (blockData.text == 'Répeter :') {
+        block.classList.add('rectangle', blockData.type);
+        block.innerHTML = `
+          <div class="bottom-border b2"></div>
+          <span>${blockData.text}</span>
+          <div class="input-container">
+            <input type="number" value="${blockData.value || ''}" step="1" min="0">
+          </div>
+          <span> &nbspfois</span>
+        `;
+      } else {
+        block.innerHTML = `
+          <span>${blockData.text}</span>
+          <div class="input-container">
+            <input type="number" value="${blockData.value || ''}" step="1" min="0">
+          </div>
+        `;
+      }
+
+      workspace.appendChild(block);
+      block.addEventListener('click', function() {
+        selectBlock(block);
+      });
+      addInputEventListener(block);
+
+     
+      function findParentRepeatAndShiftLeft(block) {
+        let parent = block.parentNode;
+        let shiftAmount = 0;
+        while (parent && parent !== document.body) {
+          if (parent.classList.contains('rectangle')) {
+            shiftAmount += 50; 
+          }
+          parent = parent.parentNode;
+        }
+        block.style.left = `${parseInt(block.style.left) - shiftAmount}px`; 
+      }
+
+      if (blockData.parentId) {
+        const parent = document.getElementById(blockData.parentId);
+        if (parent) {
+          addChild(parent, block);
+          findParentRepeatAndShiftLeft(block); 
+        }
+      }
+      blocksMap.set(uniqueId, blockData.children || []);
+    });
+  }
+}
+
+
+
+function saveBlocksToLocalStorage() {
+  const blocks = document.querySelectorAll('.workspace .block');
+  const blocksData = [];
+  const blocksMap = new Map();
+
+  function saveBlockData(block) {
+    const input = block.querySelector('input[type="number"]');
+    const blockData = {
+      id: block.id,
+      type: block.classList[1],
+      position: {
+        left: block.style.left,
+        top: block.style.top
+      },
+      text: block.querySelector('span').innerText,
+      value: input ? input.value : null,
+      parentId: block.dataset.parentId || null,
+      children: []
+    };
+
+    if (block.classList.contains('repeat')) {
+      const childBlocks = block.querySelectorAll('.block');
+      childBlocks.forEach(childBlock => {
+        blockData.children.push(saveBlockData(childBlock));
+      });
+    }
+
+    return blockData;
+  }
+
+  blocks.forEach(block => {
+    const blockData = saveBlockData(block);
+    blocksData.push(blockData);
+    blocksMap.set(blockData.id, blockData.children);
+  });
+
+  localStorage.setItem('blocksData', JSON.stringify(blocksData));
+  localStorage.setItem('blocksMap', JSON.stringify(Array.from(blocksMap.entries())));
+}
+
+
+
+
+
+  
+    window.onload = function() {
+      loadBlocksFromLocalStorage();
+    };
+
+
+function createBlock(type) {
+  const block = document.createElement('div');
+  block.classList.add('block', type);
+  block.dataset.type = type;
+  block.style.position = 'absolute';
+  addInputEventListener(block);
+  return block;
+}
+
+function adjustBlocksInRepeat() {
+  var blocks = document.getElementsByClassName('block');
+
+  for (var i = 0; i < blocks.length; i++) {
+    var block = blocks[i];
+    var parent = block.parentElement;
+    var offset = 0; // Initial offset
+
+    while (parent && !parent.classList.contains('repeat')) {
+    
+      if (parent.classList.contains('repeat-parent')) {
+        offset += 50;
+      }
+      parent = parent.parentElement;
+    }
+
+   
+    if (parent && parent.classList.contains('repeat')) {
+      adjustRepeatBlockSize(block);
+     
+      block.style.left = (parseInt(block.style.left, 10) + offset) + 'px';
+    }
+  }
+}
+
+
+window.onload = function() {
+  loadBlocksFromLocalStorage();
+  adjustBlocksInRepeat();
+};
+
+function handleBlockChange() {
+}
+
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+</body>
+</html>

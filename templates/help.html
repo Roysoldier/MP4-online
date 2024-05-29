@@ -1,0 +1,126 @@
+<html lang="fr">
+
+<head>
+  <title>Télécharger un programme - Equipe NOGO</title>
+  <link rel="icon" href="https://hpinformatique.github.io/MP4-files/LEGO_logo.png">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+    integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  <link rel="stylesheet" type="text/css" href="static/css/main.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  
+</head>
+
+  <nav class="navbar navbar-expand-lg navbar-dark nav-bg"  class="nav">
+    <a class="navbar-brand" href="index.html">
+      <img src="..\static\img\logo.png" width="60" height="60" alt="">
+    </a>
+
+    <a class="navbar-brand" href="index.html">Equipe NOGO</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown"
+      aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavDropdown">
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link" href="index.html">Accueil</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="scratch.html">NOGOPROG</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="programmes.html">Programmes tous prêts</span></a>
+        </li>
+        <li class="nav-item active">
+          <a class="nav-link" href="help.html">Aide<span class="sr-only">(current)</span></a>
+        </li>
+
+
+        
+      </ul>
+      <!-- A partir de la ça marche plus-->
+      
+      {% if not render['login']%}
+        <ul class="nav marginer">
+          <li class="nav-item "><a id="textcompte" href="signin.html" class="nav-link link-dark px-2 marginer">Se connecter</a></li>
+          <li class="nav-item"><a id="textcompte" href="signup.html" class="nav-link link-dark px-2 marginer">Créer un compte</a></li>
+        </ul>
+      {% else%}
+      <div class="nav-item dropdown  marginer2">
+        <a id="textcompte" class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown"
+          aria-haspopup="true" aria-expanded="false">
+          <img src={{render['img']}} alt="mdo" width="40" height="40" class="rounded-circle">   {{render['pseudo']}}</img>
+        </a>
+        <ul class="dropdown-menu   text-small">
+          <li><a class="dropdown-item white-color" href="profil.html">{{render['pseudo']}}</a></li>
+          <li><hr class="dropdown-divider"></li>
+          <li><a class="dropdown-item white-color" href="newproject.html">truc 1</a></li>
+          <li><a class="dropdown-item white-color" href="editprofil.html">truc 2</a></li>
+          <li><a class="dropdown-item white-color" href="myproj.html">truc 3</a></li>
+          <li><hr class="dropdown-divider white-color"></li>
+          <li><a class="dropdown-item white-color" href="#" onclick="sign_out()">Sign out</a></li>
+        </ul>
+      </div>
+      {%endif%}
+    
+    </div>
+    </div>
+  </nav>
+
+<body>
+  <br/>
+  <h2 id="center">Page d'aide à l'installation d'un programme sur l'EV3 via VS Code</h2>
+  <h4 id="titre1predef">      1-   <b><u>Lancer un programme prédéfini :</u></b></h4>
+  <p>Si vous souhaitez lancer un programme prédéfini, nous vous invitons à les retrouver dans le robot via le menu "file browser".</p>
+  <p>Si malheureusement, le programme que vous souhaitez n'est pas dans le robot, nous vous invitons à le télécharger au format ".zip" dans la <a href="programmes.html" target="_blank">page des programmes</a> sur notre site internet, puis de suivre les instructions de <a href="https://docs.google.com/document/d/1GZ1sWZFYpN8mOKnpVnIvCAZahyBbMbYh/edit?usp=drive_link&ouid=106877943429833061974&rtpof=true&sd=true" target="_blank">ce document</a> en important le dossier que vous aurez téléchargé au préalable.</p>
+  <br>
+  <h4>      2-   <b><u>Lancer un programme que vous avez conçu :</u></b></h4>
+  <p>Pour lancer un programme que vous avez conçu, accéder tout d'abord à l'éditeur NOGOPROG puis, cliquez sur le bouton enregistrer.</p>
+  <p>Ensuite, télécharger cette archive, ele contient les fichiers minimums pour que le robot soit fonctionnel. Extrayez les fichiers de l'archive et ajoutez y votre programme.</p>
+  <p>Enfin, ouvrez Visual Studio Code et téléversez le programme comme dans l'<a href="#titre1predef">option 1</a>.</p>
+
+
+
+
+
+  <br>
+  <h4>      3-   <b><u>Bugs, problèmes et solutions :</u></b></h4>
+
+
+  <br>
+  <p id="center">
+    <table align="center">
+      <colgroup>
+
+        <col style="width:600px">
+        <col style="width:600px">     
+      </colgroup>
+      <tr> <th id="center">Problème</th> <th id="center">Solution</th></tr>
+      <tr> <td>Le programme ne se lannce pas ; il s'arrête avant d'avoir démarré</td> <td>Vérifiez la connexion des fils et les débrancher et les rebrancher au besoin. Nous avons remarqué qu'il y avait des faux-contacts. Vous pouvez aussi voir les erreurs via VS Code.</td></tr>
+      <tr><td>Impossible de connecter le robot via VS Code</td><td>Vérifiez que les câbles sont correctement branchés et vérifier que VS Code et l'EV3 peuvent communiquer à travers le pare-feu</td></tr>
+      <tr><td>Le programme n'a pas l'air de faire ce qu'il est censé faire</td><td>Consulter la fiche du robot pour savoir comment il fonctionne</td></tr>
+      <tr><td>Je ne trouve pas les boutons pour mettre sur le robot</td><td>Les boutons qui sont requis pour les programmes prédéfinis se trouvent dans une enveloppe qui est dans la boite du robot.</td></tr>
+    </table>
+  </p>
+
+
+  
+
+
+    <script src="static/js/connect.js"></script>
+    <script type="text/javascript" language="javascript" src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"
+      integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+      crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
+      integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+      crossorigin="anonymous"></script>
+</body>
+
+</html>

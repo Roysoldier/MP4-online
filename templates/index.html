@@ -1,0 +1,119 @@
+<html lang="fr">
+
+<head>
+  <title>Accueil - Equipe NOGO : Bienvenue !</title>
+  <link rel="icon" href="https://hpinformatique.github.io/MP4-files/LEGO_logo.png">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+    integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  <link rel="stylesheet" type="text/css" href="static/css/main.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  
+</head>
+
+
+  <nav class="navbar navbar-expand-lg navbar-dark nav-bg"  class="nav">
+    <a class="navbar-brand" href="index.html">
+      <img src="..\static\img\logo.png" width="60" height="60" alt="">
+    </a>
+  
+    <a class="navbar-brand" href="index.html">Equipe NOGO</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown"
+      aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavDropdown">
+      <ul class="navbar-nav">
+        <li class="nav-item active">
+          <a class="nav-link" href="index.html">Accueil <span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="scratch.html">NOGOPROG</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="programmes.html">Programmes tous prêts</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="help.html">Aide</a>
+        </li>
+        
+        
+      </ul>
+      {% if not render['login']%}
+      <ul class="nav marginer">
+        <li class="nav-item "><a id="textcompte" href="signin.html" class="nav-link link-dark px-2 marginer">Se connecter</a></li>
+        <li class="nav-item"><a id="textcompte" href="signup.html" class="nav-link link-dark px-2 marginer">Créer un compte</a></li>
+      </ul>
+      {% else%}
+      <div class="nav-item dropdown  marginer2">
+        <a id="textcompte" class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown"
+          aria-haspopup="true" aria-expanded="false">
+          <img src={{render['img']}} alt="mdo" width="40" height="40" class="rounded-circle">   {{render['pseudo']}}</img>
+          
+        </a>
+        <ul class="dropdown-menu   text-small">
+          <li><a class="dropdown-item white-color" href="profil.html">{{render['pseudo']}}</a></li>
+          <li><hr class="dropdown-divider"></li>
+          <li><a class="dropdown-item white-color" href="scratch.html">Nouveau projet</a></li>
+          <li><a class="dropdown-item white-color" href="editprofil.html">Editer mon profil</a></li>
+          <li><a class="dropdown-item white-color" href="myproj.html">Mes projets</a></li>
+          <li><hr class="dropdown-divider white-color"></li>
+          <li><a class="dropdown-item white-color" href="#" onclick="sign_out()">Se déconnecter</a></li>
+        </ul>
+      </div>
+    {%endif%}
+    </div>
+    </div>
+  </nav>
+<body>
+  <br/>
+  <!-- Les lignes suivantes permettent d'afficher le nom de la personne connectée pour plus de personalisation ou rien si elle n'est pas connectée !!! -->
+  {% if not render['login']%}
+    <h2 class="titreaccueil">Bonjour et bienvenue sur le site de l'équipe NOGO !</h2>
+  {% else%}
+    <h2 class="titreaccueil">Bonjour {{render['pseudo']}} et Bienvenue sur le site de l'équipe NOGO !</h2>
+  {%endif%}
+  
+  <br>
+  <p>Retrouvez ici un ensemble d'éléments vous permettant d'utiliser le robot <a href="https://www.lego.com/fr-fr/product/lego-mindstorms-ev3-31313" target="_blank">Lego Mindstorms EV3</a>.</p>
+  <p><b><u><h4>Voici une liste des outils à votre disposition :</h4></u></b>
+  <ul>
+    <li>NOGOPROG est un outil qui vous permet de créer votre propre programme pour votre robot</li>
+    <li>Les programmes tout prêt vous permettent de lancer le robot sans vous soucier de faire votre propre programme</li>
+    <li>L'aide vous explique comment procéder pour importer votre programme ou un que vous télécharger sur notre site, dans le robot Lego Mindstorms EV3.</li>
+  </ul></p>
+  <br>
+  <h4><b><u>Application Windows :</u></b></h4>
+  <p>Nous vous proposons également une application Windows développée par <a href="mailto:pasdoith@saintemarie-cholet.eu">Hugo</a> qui permet de consulter le site internet via la connexion invité !</p>
+  <p>Vous pouvez la télécharger <a href="https://drive.google.com/uc?export=download&id=1GPk27semP75bxvt8q98Yj4rrfJpTKb6I">ici</a> ou voir des photos du code et de la conception <a href="https://drive.google.com/drive/folders/1huIMacwvemtPAS4PnlVjUZkKS05lgrEh?usp=sharing" target="_blank">ici</a>.</p>
+  <br>
+  <h4><b><u>A propos de ce projet :</u></b></h4>
+  <p>Ce projet à été conçu par <a href="mailto:royno@saintemarie-cholet.eu">Noan</a>, <a href="mailto:gabarda@saintemarie-cholet.eu">Anaïs</a> et <a href="mailto:pasdoith@saintemarie-cholet.eu">Hugo</a> dans le cadre du cours de NSI de terminale.</p>
+  <p>Pour ce dernier projet de l'année, nous avons décidé de nous donner au maximum pour vous offrir une expérience de qualité : Programmes tous prêts, conception de votre propre programme, fonctionnalités avancées et ajout de boutons personnalisés sur le robot, sans oublier une aide pour vous permettre de tester le robot sans difficulté. Nous avons aussi pensé à vous laisser la possibilité de créer un compte sur notre site afin que vous puissiez enregistrer les programmes que vous pourriez concevoir.</p>
+  <p>Après un bon paquet d'heures de travail, nous sommes fiers de vous présenter ce site avec toutes ces fonctionnalités.</p>
+  <p>Si vous rencontrez des bugs ou avez des questions, n'hésitez pas à nous contactez via <a href="https://forms.gle/X1zvvsugpLkfByHn7" target="_blank">ce formulaire</a>.</p>
+  <p>L'équipe NOGO vous souhaite une bonne journée.</p>
+  <br>
+  <br>
+  <p id="center"><img src="..\static\img\logo.png" width="200px"></p>
+  <br>
+
+  
+
+
+    <script src="static/js/connect.js"></script>
+    <script type="text/javascript" language="javascript" src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"
+      integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+      crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
+      integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+      crossorigin="anonymous"></script>
+</body>
+<footer>© L'équipe NOGO 2024</footer>
+</html>

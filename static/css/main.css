@@ -1,0 +1,195 @@
+.marginer {
+    margin-left:auto ;
+    color: #ffffff;
+}
+.marginer2 {
+    
+    margin-left:auto ;
+    margin-right: 20px;
+    color: #ffffff;
+}
+.nav-bg {
+    background-color: black;
+    border-bottom:solid 1px white;
+}
+
+.name {
+    max-width: 90%;
+    max-height: 90%;
+    border-radius: 10px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 400px;
+    background-color: rgba(255, 207, 255, 0.5);
+    padding: 15px;
+    color: #000000;
+    
+}
+
+
+.name:focus {
+    border-radius: 10px;
+    border-width: 2px;
+    width: 410px;
+    background-color:rgb(255, 255, 255);
+    border-color: rgb(255, 0, 0);
+    color: #000000;
+    font-weight: bold;
+}
+
+.ps {
+    margin-top: -1px;
+    
+}
+.ce {
+    
+    padding: 15px;
+}
+
+.request {
+    margin-top: 1em;
+    width: 300px;
+    background-color:rgba(187, 0, 0, 0.5);
+}
+
+
+
+.request:hover {
+    margin-top: 1em;
+    width: 300px;
+    background-color:rgba(255, 0, 0, 0.8);
+}
+
+p{
+    margin-left: 30px;
+    margin-right: 30px;
+}
+
+ul{
+    margin-left: 30px;
+    margin-right: 30px;
+}
+
+.titreaccueil{
+    text-align: center;
+}
+
+.iframescratch{
+    height : 100em;
+    border : 300 px solide #CCC;
+    Width : 100%;
+    min-width : 20em;
+}
+
+
+iframe {
+    display: block;
+    border: none;
+    width: 100%;       
+    height:calc(100% - 87px);
+    margin: auto;
+  }
+
+#textcompte{
+    color: rgb(255, 255, 0);
+}
+
+#textcompte:hover{
+    color: rgb(255, 136, 0);
+}
+
+button{
+    margin-left: 30px;
+    margin-right: 30px;
+}
+
+#ficherobot{
+    display: block;
+    border: 5px;
+    border-color: yellow;
+    width: 95%;
+    height:calc(80%);
+    margin: auto;
+}
+
+#bouton_robot{
+    align-content: center;
+    margin: 30px;
+    
+}
+
+#center{
+    text-align: center;
+}
+
+
+#boutondownload {
+    border: 0;
+    line-height: 2.5;
+    padding: 0 20px;
+    font-size: 1rem;
+    text-align: center;
+    color: #fff;
+    text-shadow: 1px 1px 1px #000;
+    border-radius: 10px;
+    background-color: rgba(220, 0, 0, 1);
+    background-image: linear-gradient(
+      to top left,
+      rgba(0, 0, 0, 0.2),
+      rgba(0, 0, 0, 0.2) 30%,
+      rgba(0, 0, 0, 0)
+    );
+    box-shadow:
+      inset 2px 2px 3px rgba(255, 255, 255, 0.6),
+      inset -2px -2px 3px rgba(0, 0, 0, 0.6);
+  }
+  
+  #boutondownload:hover {
+    background-color: rgba(255, 0, 0, 1);
+  }
+  
+  #boutondownload:active {
+    box-shadow:
+      inset -2px -2px 3px rgba(255, 255, 255, 0.6),
+      inset 2px 2px 3px rgba(0, 0, 0, 0.6);
+  }
+
+#lressources {
+    background-color: black;
+    color: rgb(255, 255, 0);
+    padding: 3px 60px;
+    text-align: center;
+    border-radius: 15px;
+    
+}
+
+#ressources{
+    margin-left: 24%;
+    margin-right: 24%;
+    border-radius: 10px;
+    border: solid 5px;;
+}
+
+h4{
+    margin-left: 30px;
+    margin-right: 30px;
+}
+
+#bouton_marge{
+    margin: 30px;
+}
+
+
+table, th, td {
+    margin-left: auto;
+    margin-top: auto;
+    
+    border: 2px solid rgb(0, 0, 0);
+      border-collapse: collapse;
+    
+    }
+    th, td {
+    
+    padding: 5px;
+    
+    }
